@@ -1,0 +1,33 @@
+apiVersion: apps/v1           # Which Kubernetes API to use
+kind: Deployment             # Type: Deployment (manages running apps)
+metadata:
+  name: app1                 # Name of our application
+spec:
+  replicas: 1               # How many copies to run (1 = single copy)
+  selector:
+    matchLabels:
+      app: app1             # How to find our app's containers
+  template:                 # Template for creating containers
+    metadata:
+      labels:
+        app: app1           # Label to identify our containers
+    spec:
+      containers:
+      - name: app1          # Name of the container
+        image: paulbouwer/hello-kubernetes:1.10
+        ports:
+        - containerPort: 8080
+
+---
+
+# ==================== SERVICE (Makes the app accessible) ====================
+apiVersion: v1
+kind: Service               # Type: Service (networking for apps)
+metadata:
+  name: app1               # Service name (used by ingress)
+spec:
+  selector:
+    app: app1             # Connect to containers labeled "app: app1"
+  ports:
+  - port: 8080              # Service port
+    targetPort: 8080        # Container port

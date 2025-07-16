@@ -1,0 +1,12 @@
+# Simple k3d cluster configuration
+# Use with: k3d cluster create --config k3d-simple-config.yaml
+
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: abouassi-cluster
+servers: 1
+ports:
+  - port: 8081:80
+    nodeFilters:
+      - "loadbalancer"

@@ -1,0 +1,34 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app2                    # Different name from app1
+spec:
+  replicas: 3                   # Start with 3 replicas for HA
+  selector:
+    matchLabels:
+      app: app2                 # Different label from app1
+  template:
+    metadata:
+      labels:
+        app: app2               # Must match selector above
+    spec:
+      containers:
+      - name: app2          # Container name for app2
+        image: paulbouwer/hello-kubernetes:1.10
+        ports:
+        - containerPort: 8080
+
+---
+
+# ==================== SERVICE ====================
+apiVersion: v1
+kind: Service
+metadata:
+  name: app2                    # Service name for app2
+spec:
+  selector:
+    app: app2                   # Connect to app2 pods
+  ports:
+  - port: 8080                    # Standard HTTP port
+    targetPort: 8080            # Forward to container port 5678
